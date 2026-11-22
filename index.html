@@ -453,19 +453,11 @@ function isLight(hex){ return lum(hex)>0.45; }
 function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function normUrl(u){ u=(u||'').trim(); if(!u) return ''; if(!/^[a-z][a-z0-9+.-]*:/i.test(u)) u='https://'+u; return u; }
 
-// ---------- remembered form ----------
-const FIELDS=['appName','url','pkg','vname','vcode','topColor','navColor','iconBg'];
-function save(){
-  const o={}; for(const f of FIELDS) o[f]=$(f).value;
-  o.src=radio('src'); o.mode=radio('mode'); o.fit=radio('fit'); o.same=$('sameColor').checked;
-  store.set('w2a-form', JSON.stringify(o));
-}
+// ---------- form is not remembered: nothing typed is stored ----------
+function save(){}
 function load(){
-  let o=null; try{ o=JSON.parse(store.get('w2a-form')||'null'); }catch(e){}
-  if(o){ for(const f of FIELDS) if(o[f]!=null) $(f).value=o[f];
-    for(const [n,v] of [['src',o.src],['mode',o.mode],['fit',o.fit]]){ const el=document.querySelector('input[name='+n+'][value="'+v+'"]'); if(el) el.checked=true; }
-    $('sameColor').checked = o.same!==false; }
-  if(!$('pkg').value) $('pkg').value=randomPkg();
+  try { localStorage.removeItem('w2a-form'); } catch(e){}
+  $('pkg').value=randomPkg();
 }
 
 // ---------- icon ----------
