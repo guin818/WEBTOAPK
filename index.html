@@ -56,6 +56,11 @@ summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:
 .done{margin-top:16px;border:2px solid var(--ink);border-radius:12px;padding:16px}
 .done h3{margin:0 0 4px;font-size:18px}
 .mono{font-family:ui-monospace,Menlo,monospace;font-size:13px;overflow-wrap:anywhere}
+.appdl[hidden]{display:none}
+.appdl{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px;padding:14px 16px;border:2px solid var(--ink);border-radius:12px}
+.appdl p{margin:0;flex:1 1 220px;font-size:15px}
+.appdl a{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:10px 18px;border-radius:9px;background:var(--ink);color:var(--bg);font-weight:600;text-decoration:none}
+.appdl a:focus-visible{outline:3px solid var(--red);outline-offset:2px}
 /* phone */
 .phone{width:min(300px,78vw);margin:0 auto;aspect-ratio:9/18.5;border:10px solid #111;border-radius:38px;background:#111;position:relative;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.18)}
 .scr{position:absolute;inset:0;border-radius:28px;overflow:hidden;display:flex;flex-direction:column;background:#fff}
@@ -82,6 +87,7 @@ summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:
 <header>
   <h1>웹사이트를 안드로이드 앱으로</h1>
   <p class="lead">주소나 HTML 파일을 넣고, 이름과 아이콘을 정하면 바로 설치할 수 있는 APK가 만들어져요. 모든 작업은 이 기기 안에서만 처리돼요.</p>
+  <div class="appdl" id="appDl"><p><b>WebToAPK 앱</b>으로 설치하면 폰에서 더 편하게 만들 수 있어요.</p><a href="webtoapk.apk" download="webtoapk.apk">앱 다운로드</a></div>
 </header>
 
 <div class="grid">
@@ -599,6 +605,8 @@ async function build(){
 }
 
 // ---------- wire up ----------
+if(inApp) $('appDl').hidden=true;
+else claudeDownloads().then(d=>{ if(d) $('appDl').hidden=true; }).catch(()=>{});
 load(); preview();
 document.addEventListener('input', e=>{ if(e.target.id==='topColor'&&$('sameColor').checked) $('navColor').value=$('topColor').value; save(); preview(); });
 document.addEventListener('change', e=>{
