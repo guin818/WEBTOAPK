@@ -60,6 +60,11 @@ summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:
 .appdl{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px;padding:14px 16px;border:2px solid var(--ink);border-radius:12px}
 .appdl p{margin:0;flex:1 1 220px;font-size:15px}
 .appdl a{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:10px 18px;border-radius:9px;background:var(--ink);color:var(--bg);font-weight:600;text-decoration:none}
+.dlbtns{display:flex;gap:10px;flex-wrap:wrap}
+.dlbtns button{min-height:46px}
+.guide{flex:1 1 100%;margin:4px 0 0;padding-left:1.3em;font-size:15px;line-height:1.6}
+.guide li{margin:6px 0}
+.guide[hidden]{display:none}
 .appdl a:focus-visible{outline:3px solid var(--red);outline-offset:2px}
 /* phone */
 .phone{width:min(300px,78vw);margin:0 auto;aspect-ratio:9/18.5;border:10px solid #111;border-radius:38px;background:#111;position:relative;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.18)}
@@ -87,7 +92,7 @@ summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:
 <header>
   <h1>웹사이트를 안드로이드 앱으로</h1>
   <p class="lead">주소나 HTML 파일을 넣고, 이름과 아이콘을 정하면 바로 설치할 수 있는 APK가 만들어져요. 모든 작업은 이 기기 안에서만 처리돼요.</p>
-  <div class="appdl" id="appDl"><p><b>WebToAPK 앱</b>으로 설치하면 폰에서 더 편하게 만들 수 있어요.</p><a href="webtoapk.apk" download="webtoapk.apk">앱 다운로드</a></div>
+  <div class="appdl" id="appDl"><p><b>WebToAPK 앱</b>으로 설치하면 폰에서 더 편하게 만들 수 있어요.</p><div class="dlbtns"><a href="webtoapk.apk" download="webtoapk.apk">앱 다운로드</a><button type="button" id="guideBtn" aria-expanded="false" aria-controls="guide">설치 가이드</button></div><ol class="guide" id="guide" hidden><li><b>"앱 다운로드"</b>를 눌러 webtoapk.apk를 받아요. 크롬이 "유해할 수 있는 파일"이라고 물으면 <b>다운로드</b>를 눌러요.</li><li>알림창이나 <b>내 파일 → 다운로드</b>에서 webtoapk.apk를 눌러요.</li><li>"출처를 알 수 없는 앱" 안내가 뜨면 <b>설정</b>을 누르고 <b>이 출처 허용</b>을 켠 뒤 뒤로 가요.</li><li><b>설치</b>를 눌러요.</li><li>Play 프로텍트가 <b>"앱을 검사할까요?"</b>라고 물으며 <b>검사하기</b> 버튼이 뜰 수 있어요. 눌러서 검사해도 되고, 검사가 끝나면 설치를 이어서 하면 돼요. 경고가 뜨면 <b>세부정보 → 무시하고 설치</b>를 눌러요. 개인이 만든 앱이라 뜨는 안내예요.</li><li>설치가 끝나면 <b>열기</b>. 홈 화면에 WebToAPK 아이콘이 생겨요.</li><li>새 버전도 같은 방법으로 설치하면 기존 앱 위에 업데이트돼요. "앱이 설치되지 않았습니다"가 뜨면 기존 앱을 지우고 다시 설치해 보세요.</li></ol></div>
 </header>
 
 <div class="grid">
@@ -607,6 +612,7 @@ async function build(){
 // ---------- wire up ----------
 if(inApp) $('appDl').hidden=true;
 else claudeDownloads().then(d=>{ if(d) $('appDl').hidden=true; }).catch(()=>{});
+$('guideBtn').onclick=()=>{ const g=$('guide'); g.hidden=!g.hidden; $('guideBtn').setAttribute('aria-expanded',String(!g.hidden)); $('guideBtn').textContent=g.hidden?'설치 가이드':'가이드 닫기'; };
 load(); preview();
 document.addEventListener('input', e=>{ if(e.target.id==='topColor'&&$('sameColor').checked) $('navColor').value=$('topColor').value; save(); preview(); });
 document.addEventListener('change', e=>{
